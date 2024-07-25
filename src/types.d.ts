@@ -1,4 +1,4 @@
-type NavItem = {
-  key: string;
-  label: string;
+type APIRoleType = {
+  id: number;
+  roleName: string;
 };

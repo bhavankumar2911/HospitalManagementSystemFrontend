@@ -3,10 +3,12 @@ import React from "react";
 
 interface SubmitButtonProps {
   form: FormInstance;
+  loading: boolean;
 }
 
 const SubmitButton: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({
   form,
+  loading,
   children,
 }) => {
   const [submittable, setSubmittable] = React.useState<boolean>(false);
@@ -22,7 +24,12 @@ const SubmitButton: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({
   }, [form, values]);
 
   return (
-    <Button type="primary" htmlType="submit" disabled={!submittable}>
+    <Button
+      type="primary"
+      htmlType="submit"
+      disabled={!submittable}
+      loading={loading}
+    >
       {children}
     </Button>
   );
