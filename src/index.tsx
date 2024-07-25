@@ -5,6 +5,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Admin from "./pages/admin/index";
+import axios from "axios";
+import Config from "./config";
+
+// axios config
+axios.defaults.baseURL = Config.API_BASE_URL;
+axios.defaults.withCredentials = true;
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const router = createBrowserRouter([
   {
