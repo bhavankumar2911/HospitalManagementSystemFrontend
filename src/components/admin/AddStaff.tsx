@@ -1,4 +1,5 @@
 import {
+  Button,
   Col,
   DatePicker,
   Form,
@@ -8,32 +9,20 @@ import {
   Row,
   Select,
   Skeleton,
+  Space,
   Typography,
 } from "antd";
 import { useEffect, useState } from "react";
 import SubmitButton from "../app/SubmitButton";
 import dayjs from "dayjs";
 import axios, { AxiosError } from "axios";
+import Role from "../../enums/Role";
 
 const AddStaff = () => {
   const [form] = Form.useForm();
-  const [loadingRoles, setLoadingRoles] = useState(true);
-  const [roles, setRoles] = useState<APIRoleType[]>([]);
+  const [staffRole, setStaffRole] = useState<number>();
+  const [apiURL, setApiURL] = useState("/staff");
   const [savingStaff, setSavingStaff] = useState(false);
-
-  useEffect(() => {
-    axios
-      .get("/role")
-      .then((response) => {
-        console.log(response);
-        setLoadingRoles(false);
-        setRoles([...response.data.data]);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoadingRoles(false);
-      });
-  }, []);
 
   const saveStaff = async (form: FormInstance) => {
     let data = form.getFieldsValue();
@@ -46,14 +35,18 @@ const AddStaff = () => {
       dateOfJoining: form.getFieldValue("dateOfJoining").toISOString(),
     };
 
+    console.log(data);
+
     try {
       setSavingStaff(true);
-      const response = await axios.post("/staff", data);
+      const response = await axios.post(apiURL, data);
 
       console.log(response.data);
       message.success(response.data.message);
       form.resetFields();
       setSavingStaff(false);
+      setApiURL("/staff");
+      setStaffRole(undefined);
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         message.error(error.response.data.message);
@@ -62,9 +55,21 @@ const AddStaff = () => {
     }
   };
 
-  if (loadingRoles) return <Skeleton active />;
+  const getRoles = () => {
+    const roles = [];
 
-  if (roles.length == 0) return null;
+    for (const role in Role) {
+      if (isNaN(Number(role))) {
+        const roleValue = Role[role as keyof typeof Role];
+        roles.push({
+          value: roleValue,
+          label: role,
+        });
+      }
+    }
+
+    return roles;
+  };
 
   return (
     <section>
@@ -192,7 +197,7 @@ const AddStaff = () => {
           <Col span={24} md={12}>
             <Form.Item
               label="Role"
-              name="roleId"
+              name="role"
               validateDebounce={1000}
               rules={[
                 {
@@ -202,15 +207,71 @@ const AddStaff = () => {
               ]}
             >
               <Select
-                // onChange={handleChange}
-                options={roles.map((role) => ({
-                  value: role.id,
-                  label: role.roleName,
-                }))}
+                onChange={(value) => {
+                  if (value == 0) {
+                    setStaffRole(value);
+                    setApiURL("/doctor");
+                  } else {
+                    setStaffRole(value);
+                    setApiURL("/staff");
+                  }
+                }}
+                options={getRoles()}
                 style={{ width: "100%" }}
               />
             </Form.Item>
           </Col>
+
+          {/* only for doctor */}
+          {staffRole == 0 ? (
+            <>
+              <Col span={24} md={12}>
+                <Form.Item
+                  hasFeedback
+                  label="Doctor's Qualification"
+                  name="qualification"
+                  validateDebounce={1000}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Qualification is required.",
+                    },
+                    {
+                      min: 2,
+                      message:
+                        "Qualification must be atleast 2 characters long.",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Eg. MBBS" />
+                </Form.Item>
+              </Col>
+
+              <Col span={24} md={12}>
+                <Form.Item
+                  hasFeedback
+                  label="Doctor's Specialization"
+                  name="specialization"
+                  validateDebounce={1000}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Specialization is required.",
+                    },
+                    {
+                      min: 3,
+                      message:
+                        "Specialization must be atleast 3 characters long.",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Eg. Dentist" />
+                </Form.Item>
+              </Col>
+            </>
+          ) : null}
+
+          {/* only for doctor */}
 
           <Col span={24} md={12}>
             <Form.Item
@@ -261,11 +322,19 @@ const AddStaff = () => {
           </Col>
         </Row>
 
-        <Form.Item>
-          <SubmitButton loading={savingStaff} form={form}>
-            Add Staff
-          </SubmitButton>
-        </Form.Item>
+        <Space>
+          <Form.Item>
+            <SubmitButton loading={savingStaff} form={form}>
+              Add Staff
+            </SubmitButton>
+          </Form.Item>
+
+          <Form.Item>
+            <Button htmlType="button" onClick={() => form.resetFields()}>
+              Reset
+            </Button>
+          </Form.Item>
+        </Space>
       </Form>
     </section>
   );
