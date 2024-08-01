@@ -1,8 +1,8 @@
 import { MenuItemType } from "antd/es/menu/interface";
 import AppLayout from "../../../components/app/AppLayout";
-import AddPatient from "../../../components/reception/AddPatient";
 import { Link } from "react-router-dom";
 import FixAppoinment from "../../../components/reception/FixAppoinment";
+import UpcomingAppointments from "../../../components/reception/UpcomingAppointments";
 
 const navLinks: MenuItemType[] = [
   { key: "home", label: <Link to="/">Home</Link> },
@@ -20,6 +20,7 @@ const Appointment = () => {
   return (
     <AppLayout navItems={navLinks}>
       <FixAppoinment />
+      <UpcomingAppointments />
     </AppLayout>
   );
 };

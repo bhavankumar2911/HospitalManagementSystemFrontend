@@ -14,12 +14,18 @@ import TextArea from "antd/es/input/TextArea";
 import { DefaultOptionType } from "antd/es/select";
 import axios from "axios";
 import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import SubmitButton from "../app/SubmitButton";
 import { Link } from "react-router-dom";
 
 const FixAppoinment = () => {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
   const [doctorOptions, setDoctorOptions] = useState<DefaultOptionType[]>([]);
   const [patientOptions, setPatientOptions] = useState<DefaultOptionType[]>([]);
 
@@ -85,8 +91,7 @@ const FixAppoinment = () => {
       message.error(err.response.data.message);
     },
     onSuccess: (data) => {
-      console.log(data.message);
-
+      queryClient.invalidateQueries("appointmentsQuery");
       message.success(data.message);
       form.resetFields();
     },
@@ -133,9 +138,9 @@ const FixAppoinment = () => {
                   </Space>
                 )}
               />
-              <Typography.Link>
+              {/* <Typography.Link>
                 <Link to="/reception/patient">Patient not found? Add new</Link>
-              </Typography.Link>
+              </Typography.Link> */}
             </Form.Item>
           </Col>
 
