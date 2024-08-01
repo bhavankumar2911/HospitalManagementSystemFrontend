@@ -3,81 +3,72 @@ import {
   Col,
   DatePicker,
   Form,
-  FormInstance,
   Input,
   message,
   Row,
   Select,
-  Skeleton,
   Space,
+  Switch,
   Typography,
 } from "antd";
-import { useEffect, useState } from "react";
+import createDropdownOptions from "../../lib/app/createDropdownOptions";
+import getGenderTypes from "../../lib/app/getGenderTypes";
 import SubmitButton from "../app/SubmitButton";
-import dayjs from "dayjs";
+import getBloodTypes from "../../lib/app/getBloodTypes";
+import { useState } from "react";
 import axios, { AxiosError } from "axios";
-import Role from "../../enums/Role";
+import dayjs from "dayjs";
 
-const AddStaff = () => {
+const AddPatient = () => {
   const [form] = Form.useForm();
-  const [staffRole, setStaffRole] = useState<number>();
-  const [apiURL, setApiURL] = useState("/staff");
-  const [savingStaff, setSavingStaff] = useState(false);
+  const [collectMedicalHistory, setCollectMedicalHistory] = useState(false);
+  const [savingPatient, setSavingPatient] = useState(false);
 
-  const saveStaff = async (form: FormInstance) => {
-    let data = form.getFieldsValue();
-    data = {
-      ...data,
-      dateOfBirth: form.getFieldValue("dateOfBirth").toISOString(),
+  const savePatient = async () => {
+    const data = form.getFieldsValue();
+    const medicalHistory = {
+      preConditions: "",
+      allergies: "",
     };
-    data = {
-      ...data,
-      dateOfJoining: form.getFieldValue("dateOfJoining").toISOString(),
-    };
+
+    if (collectMedicalHistory) {
+      medicalHistory.preConditions = data.preConditions;
+      medicalHistory.allergies = data.allergies;
+    }
+
+    data.medicalHistory = medicalHistory;
+    data.gender = parseInt(data.gender);
+    data.blood = parseInt(data.blood);
+    delete data.preConditions;
+    delete data.allergies;
+
+    console.log(data);
 
     try {
-      setSavingStaff(true);
-      const response = await axios.post(apiURL, data);
+      setSavingPatient(true);
+      const response = await axios.post("/patient", data);
 
       message.success(response.data.message);
       form.resetFields();
-      setSavingStaff(false);
-      setApiURL("/staff");
-      setStaffRole(undefined);
+      setSavingPatient(false);
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         message.error(error.response.data.message);
-        setSavingStaff(false);
+        setSavingPatient(false);
       }
     }
-  };
-
-  const getRoles = () => {
-    const roles = [];
-
-    for (const role in Role) {
-      if (isNaN(Number(role))) {
-        const roleValue = Role[role as keyof typeof Role];
-        roles.push({
-          value: roleValue,
-          label: role,
-        });
-      }
-    }
-
-    return roles;
   };
 
   return (
     <section>
-      <Typography.Title level={2}>Add Staff</Typography.Title>
+      <Typography.Title level={2}>Add Patient</Typography.Title>
       <Form
-        name="trigger"
+        name="add-patient"
         style={{ maxWidth: 600 }}
         layout="vertical"
         autoComplete="off"
         form={form}
-        onSubmitCapture={() => saveStaff(form)}
+        onSubmitCapture={savePatient}
       >
         <Row gutter={20}>
           <Col span={24} md={12}>
@@ -177,114 +168,77 @@ const AddStaff = () => {
 
           <Col span={24} md={12}>
             <Form.Item
-              label="Date of joining"
-              name="dateOfJoining"
+              hasFeedback
+              label="Gender"
+              name="gender"
               validateDebounce={1000}
               rules={[
                 {
                   required: true,
-                  message: "Date of joining is required.",
-                },
-              ]}
-            >
-              <DatePicker minDate={dayjs()} style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-
-          <Col span={24} md={12}>
-            <Form.Item
-              label="Role"
-              name="role"
-              validateDebounce={1000}
-              rules={[
-                {
-                  required: true,
-                  message: "Role is required.",
+                  message: "Gender is required.",
                 },
               ]}
             >
               <Select
-                onChange={(value) => {
-                  if (value == 0) {
-                    setStaffRole(value);
-                    setApiURL("/doctor");
-                  } else {
-                    setStaffRole(value);
-                    setApiURL("/staff");
-                  }
-                }}
-                options={getRoles()}
+                options={createDropdownOptions(getGenderTypes())}
                 style={{ width: "100%" }}
               />
             </Form.Item>
           </Col>
 
-          {/* only for doctor */}
-          {staffRole == 0 ? (
-            <>
-              <Col span={24} md={12}>
-                <Form.Item
-                  hasFeedback
-                  label="Doctor's Qualification"
-                  name="qualification"
-                  validateDebounce={1000}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Qualification is required.",
-                    },
-                    {
-                      min: 2,
-                      message:
-                        "Qualification must be atleast 2 characters long.",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Eg. MBBS" />
-                </Form.Item>
-              </Col>
-
-              <Col span={24} md={12}>
-                <Form.Item
-                  hasFeedback
-                  label="Doctor's Specialization"
-                  name="specialization"
-                  validateDebounce={1000}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Specialization is required.",
-                    },
-                    {
-                      min: 3,
-                      message:
-                        "Specialization must be atleast 3 characters long.",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Eg. Dentist" />
-                </Form.Item>
-              </Col>
-            </>
-          ) : null}
-
-          {/* only for doctor */}
-
           <Col span={24} md={12}>
             <Form.Item
-              label="Date of Birth"
-              name="dateOfBirth"
+              hasFeedback
+              label="Blood type"
+              name="blood"
               validateDebounce={1000}
               rules={[
                 {
                   required: true,
-                  message: "Date of Birth is required.",
+                  message: "Kindly select the blood type",
                 },
               ]}
             >
-              <DatePicker maxDate={dayjs()} style={{ width: "100%" }} />
+              <Select
+                options={createDropdownOptions(getBloodTypes())}
+                style={{ width: "100%" }}
+              />
             </Form.Item>
           </Col>
+
+          <Space style={{ width: "100%", marginBottom: "1rem" }}>
+            <Switch
+              size="small"
+              onChange={(checked) => setCollectMedicalHistory(checked)}
+            />
+            <Typography.Text>Has medical history?</Typography.Text>
+          </Space>
+
+          {collectMedicalHistory ? (
+            <>
+              <Col span={24} md={12}>
+                <Form.Item
+                  hasFeedback
+                  label="Preconditions"
+                  name="preConditions"
+                  validateDebounce={1000}
+                >
+                  <Input placeholder="Eg. diabetes" />
+                </Form.Item>
+              </Col>
+
+              <Col span={24} md={12}>
+                <Form.Item
+                  hasFeedback
+                  label="Allergies"
+                  name="allergies"
+                  validateDebounce={1000}
+                >
+                  <Input placeholder="Eg. milk, etc." />
+                </Form.Item>
+              </Col>
+            </>
+          ) : null}
 
           <Col span={24} md={12}>
             <Form.Item
@@ -304,25 +258,25 @@ const AddStaff = () => {
 
           <Col span={24} md={12}>
             <Form.Item
-              label="Password"
-              name="plainTextPassword"
+              label="Date of Birth"
+              name="dateOfBirth"
               validateDebounce={1000}
               rules={[
                 {
                   required: true,
-                  message: "Password is required.",
+                  message: "Date of Birth is required.",
                 },
               ]}
             >
-              <Input.Password />
+              <DatePicker maxDate={dayjs()} style={{ width: "100%" }} />
             </Form.Item>
           </Col>
         </Row>
 
         <Space>
           <Form.Item>
-            <SubmitButton loading={savingStaff} form={form}>
-              Add Staff
+            <SubmitButton loading={savingPatient} form={form}>
+              Add Patient
             </SubmitButton>
           </Form.Item>
 
@@ -337,4 +291,4 @@ const AddStaff = () => {
   );
 };
 
-export default AddStaff;
+export default AddPatient;
