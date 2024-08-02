@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Col,
   Form,
@@ -12,7 +13,7 @@ import {
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { DefaultOptionType } from "antd/es/select";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import {
   QueryClient,
@@ -47,43 +48,43 @@ const FixAppoinment = () => {
     return response.data;
   };
 
-  const { isLoading: loadingDoctors } = useQuery(
-    "doctorsQuery",
-    fetchDoctorsWithLeastAppointments,
-    {
-      onSuccess: (data) => {
-        setDoctorOptions([
-          ...data.data.map((doctor: any) => {
-            return {
-              label: doctor.firstname + " " + doctor.lastname,
-              value: doctor.id,
-              email: doctor.email,
-            };
-          }),
-        ]);
-      },
-    }
-  );
+  const {
+    isLoading: loadingDoctors,
+    isError: isDoctorsQueryError,
+    error: doctorsQueryError,
+  } = useQuery("doctorsQuery", fetchDoctorsWithLeastAppointments, {
+    onSuccess: (data) => {
+      setDoctorOptions([
+        ...data.data.map((doctor: any) => {
+          return {
+            label: doctor.firstname + " " + doctor.lastname,
+            value: doctor.id,
+            email: doctor.email,
+          };
+        }),
+      ]);
+    },
+  });
 
-  const { isLoading: loadingPatients } = useQuery(
-    "patientQuery",
-    fetchPatients,
-    {
-      onSuccess: (data) => {
-        console.log(data);
+  const {
+    isLoading: loadingPatients,
+    isError: ispatientQueryError,
+    error: patientQueryError,
+  } = useQuery("patientQuery", fetchPatients, {
+    onSuccess: (data) => {
+      console.log(data);
 
-        setPatientOptions([
-          ...data.data.map((patient: any) => {
-            return {
-              label: patient.firstname + " " + patient.lastname,
-              value: patient.id,
-              email: patient.email,
-            };
-          }),
-        ]);
-      },
-    }
-  );
+      setPatientOptions([
+        ...data.data.map((patient: any) => {
+          return {
+            label: patient.firstname + " " + patient.lastname,
+            value: patient.id,
+            email: patient.email,
+          };
+        }),
+      ]);
+    },
+  });
 
   const { mutate, isLoading: fixingAppointment } = useMutation(fixAppointment, {
     onError: (err: any) => {
@@ -96,6 +97,48 @@ const FixAppoinment = () => {
       form.resetFields();
     },
   });
+
+  if (isDoctorsQueryError)
+    return (
+      <Alert
+        type="error"
+        message={(doctorsQueryError as any).response.data.message}
+        banner
+      />
+    );
+
+  if (ispatientQueryError) {
+    if ((patientQueryError as any).response.status == 404)
+      return (
+        <Alert
+          type="warning"
+          message={"No patients are available."}
+          action={
+            <Button>
+              <Link to="/reception/patient">Add one</Link>
+            </Button>
+          }
+          banner
+        />
+      );
+
+    return (
+      <Alert
+        type="error"
+        message={(patientQueryError as any).response.data.message}
+        banner
+      />
+    );
+  }
+
+  if (isDoctorsQueryError)
+    return (
+      <Alert
+        type="error"
+        message={(doctorsQueryError as any).response.data.message}
+        banner
+      />
+    );
 
   if (loadingDoctors || loadingPatients) return <Skeleton active />;
 

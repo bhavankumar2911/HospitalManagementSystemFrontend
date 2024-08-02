@@ -1,0 +1,119 @@
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  message,
+  Row,
+  Space,
+  Typography,
+} from "antd";
+import SubmitButton from "../app/SubmitButton";
+import { useMutation } from "react-query";
+import axios from "axios";
+import { redirect, useNavigate } from "react-router-dom";
+
+const StaffLogin = () => {
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
+
+  const loginStaff = async () => {
+    const response = await axios.post("/login", form.getFieldsValue());
+
+    return response.data;
+  };
+
+  const { mutate, isLoading } = useMutation(loginStaff, {
+    onSuccess: (data) => {
+      console.log(data);
+      const staff = data.data;
+      localStorage.setItem("token", staff.token);
+
+      switch (staff.role) {
+        // receptionist
+        case 2:
+          navigate("/reception");
+          break;
+        // admin
+        case 4:
+          navigate("/admin");
+          break;
+        default:
+          break;
+      }
+    },
+    onError: (err: any) => {
+      console.log(err);
+      message.error(err.response.data.message);
+    },
+  });
+
+  return (
+    <section>
+      <Form
+        name="trigger"
+        style={{ maxWidth: 600, margin: "0 auto" }}
+        layout="vertical"
+        autoComplete="off"
+        form={form}
+        onSubmitCapture={() => mutate()}
+      >
+        {/* <Row gutter={20}>
+          <Col span={24} md={12}> */}
+        <Typography.Title level={2}>Staff Login</Typography.Title>
+        <Form.Item
+          hasFeedback
+          label="Email"
+          name="email"
+          validateDebounce={1000}
+          rules={[
+            {
+              required: true,
+              message: "Email is required.",
+            },
+            {
+              pattern: /^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/,
+              message: "Email address is invalid.",
+            },
+          ]}
+        >
+          <Input placeholder="Eg. john@gmail.com" />
+        </Form.Item>
+        {/* </Col> */}
+
+        {/* <Col span={24} md={12}> */}
+        <Form.Item
+          label="Password"
+          name="plainTextPassword"
+          validateDebounce={1000}
+          rules={[
+            {
+              required: true,
+              message: "Password is required.",
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+        {/* </Col> */}
+
+        <Space>
+          <Form.Item>
+            <SubmitButton loading={isLoading} form={form}>
+              Add Staff
+            </SubmitButton>
+          </Form.Item>
+
+          <Form.Item>
+            <Button htmlType="button" onClick={() => form.resetFields()}>
+              Reset
+            </Button>
+          </Form.Item>
+        </Space>
+        {/* </Row> */}
+      </Form>
+    </section>
+  );
+};
+
+export default StaffLogin;

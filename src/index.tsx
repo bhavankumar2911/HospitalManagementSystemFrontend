@@ -10,6 +10,9 @@ import Config from "./config";
 import Appointment from "./pages/reception/appointment";
 import Patient from "./pages/reception/patient";
 import { QueryClient, QueryClientProvider } from "react-query";
+import Login from "./pages/auth/staff/login";
+import AppContextProvider from "./context/AppContextProvider";
+import ReceptionHome from "./pages/reception/home";
 
 // axios config
 axios.defaults.baseURL = Config.API_BASE_URL;
@@ -26,12 +29,20 @@ const router = createBrowserRouter([
     element: <Admin />,
   },
   {
+    path: "/reception",
+    element: <ReceptionHome />,
+  },
+  {
     path: "/reception/patient",
     element: <Patient />,
   },
   {
     path: "/reception/appointment",
     element: <Appointment />,
+  },
+  {
+    path: "/auth/staff/login",
+    element: <Login />,
   },
 ]);
 
@@ -43,7 +54,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AppContextProvider>
+        <RouterProvider router={router} />
+      </AppContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
