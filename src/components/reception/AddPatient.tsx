@@ -105,14 +105,6 @@ const AddPatient = () => {
               validateDebounce={1000}
               rules={[
                 {
-                  min: 2,
-                  message: "Lastname must have atleast 2 characters long.",
-                },
-                {
-                  required: true,
-                  message: "Lastname is required.",
-                },
-                {
                   pattern: /^[a-zA-Z ]*$/,
                   message:
                     "Lastname can have only lowercase letters and spaces.",

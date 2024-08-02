@@ -51,7 +51,6 @@ const UpcomingAppointments = () => {
     fetchUpcomingAppointments,
     {
       onSuccess: (appointments) => {
-        console.table(appointments);
         setTableData([
           ...appointments.map((appointment: any) => {
             return {

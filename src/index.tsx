@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Login from "./pages/auth/staff/login";
 import AppContextProvider from "./context/AppContextProvider";
 import ReceptionHome from "./pages/reception/home";
+import DoctorAppointments from "./pages/doctor";
 
 // axios config
 axios.defaults.baseURL = Config.API_BASE_URL;
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/reception",
     element: <ReceptionHome />,
+  },
+  {
+    path: "/doctor",
+    element: <DoctorAppointments />,
   },
   {
     path: "/reception/patient",

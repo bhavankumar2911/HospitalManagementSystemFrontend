@@ -30,6 +30,10 @@ const StaffLogin = () => {
       localStorage.setItem("token", staff.token);
 
       switch (staff.role) {
+        // doctor
+        case 0:
+          navigate("/doctor");
+          break;
         // receptionist
         case 2:
           navigate("/reception");
@@ -58,8 +62,6 @@ const StaffLogin = () => {
         form={form}
         onSubmitCapture={() => mutate()}
       >
-        {/* <Row gutter={20}>
-          <Col span={24} md={12}> */}
         <Typography.Title level={2}>Staff Login</Typography.Title>
         <Form.Item
           hasFeedback
@@ -79,9 +81,7 @@ const StaffLogin = () => {
         >
           <Input placeholder="Eg. john@gmail.com" />
         </Form.Item>
-        {/* </Col> */}
 
-        {/* <Col span={24} md={12}> */}
         <Form.Item
           label="Password"
           name="plainTextPassword"
@@ -95,7 +95,6 @@ const StaffLogin = () => {
         >
           <Input.Password />
         </Form.Item>
-        {/* </Col> */}
 
         <Space>
           <Form.Item>
@@ -110,7 +109,6 @@ const StaffLogin = () => {
             </Button>
           </Form.Item>
         </Space>
-        {/* </Row> */}
       </Form>
     </section>
   );
