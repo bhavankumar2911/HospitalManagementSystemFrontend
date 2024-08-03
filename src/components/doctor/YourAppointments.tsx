@@ -1,40 +1,14 @@
-import { Alert, Skeleton, Table, Typography } from "antd";
+import { Alert, Button, message, Skeleton, Table, Typography } from "antd";
 import { ColumnType } from "antd/es/table";
 import axios, { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
-
-const columns: ColumnType<any>[] = [
-  {
-    title: "Patient Name",
-    dataIndex: "patientName",
-    key: "patientName",
-  },
-  {
-    title: "Concern",
-    dataIndex: "concern",
-    key: "concern",
-  },
-  {
-    title: "Appointment Timing",
-    dataIndex: "appointmentTiming",
-    key: "appointmentTiming",
-  },
-  {
-    title: "",
-    dataIndex: "prescribeButton",
-    key: "prescribeButton",
-    render: (patientId) => (
-      <Link to={`/doctor/prescribe/${patientId}`}>Prescribe medicine</Link>
-    ),
-  },
-];
 
 const YourAppointments = () => {
   const [tableData, setTableData] = useState<any[]>([]);
-
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const getAppointmentsOfTheDoctors = async () => {
@@ -59,12 +33,75 @@ const YourAppointments = () => {
               patientName: `${appointment.patient.firstname} ${appointment.patient.lastname}`,
               concern: appointment.concern,
               prescribeButton: appointment.patient.id,
+              closeAppointmentLink: appointment.id,
             };
           }),
         ]);
       },
     }
   );
+
+  const closeAppointment = async (appointmentId: number) => {
+    const response = await axios.patch("/doctor/appointment/close", null, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      params: {
+        appointmentId,
+      },
+    });
+
+    return response.data;
+  };
+
+  const { mutate } = useMutation(closeAppointment, {
+    onSuccess: (data) => {
+      message.success(data.message);
+      queryClient.invalidateQueries("doctorAppointmentsQuery");
+    },
+    onError: (err) => {
+      console.log(err);
+
+      if (err instanceof AxiosError && err.response)
+        message.error(err.response.data.message);
+    },
+  });
+
+  const columns: ColumnType<any>[] = [
+    {
+      title: "Patient Name",
+      dataIndex: "patientName",
+      key: "patientName",
+    },
+    {
+      title: "Concern",
+      dataIndex: "concern",
+      key: "concern",
+    },
+    {
+      title: "Appointment Timing",
+      dataIndex: "appointmentTiming",
+      key: "appointmentTiming",
+    },
+    {
+      title: "",
+      dataIndex: "prescribeButton",
+      key: "prescribeButton",
+      render: (patientId) => (
+        <Link to={`/doctor/prescribe/${patientId}`}>Prescribe medicine</Link>
+      ),
+    },
+    {
+      title: "",
+      dataIndex: "closeAppointmentLink",
+      key: "closeAppointmentLink",
+      render: (appointmentId) => (
+        <Button onClick={() => mutate(appointmentId)} danger>
+          Close appointment
+        </Button>
+      ),
+    },
+  ];
 
   if (isLoading) return <Skeleton active />;
 

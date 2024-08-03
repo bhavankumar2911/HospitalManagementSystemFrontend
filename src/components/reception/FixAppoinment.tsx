@@ -88,7 +88,6 @@ const FixAppoinment = () => {
 
   const { mutate, isLoading: fixingAppointment } = useMutation(fixAppointment, {
     onError: (err: any) => {
-      console.log(err);
       message.error(err.response.data.message);
     },
     onSuccess: (data) => {

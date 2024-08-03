@@ -44,7 +44,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
         });
       },
       onError: () => {
-        setUserInfo({ ...userInfo, isAuthenticated: false });
+        setUserInfo({ ...userInfo, isAuthenticated: false, role: "", id: "" });
       },
     }
   );
