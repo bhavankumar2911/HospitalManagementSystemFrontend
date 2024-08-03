@@ -32,7 +32,7 @@ const YourAppointments = () => {
               appointmentTiming: dayjs(appointment.fixedDateTime).toString(),
               patientName: `${appointment.patient.firstname} ${appointment.patient.lastname}`,
               concern: appointment.concern,
-              prescribeButton: appointment.patient.id,
+              prescribeButton: appointment,
               closeAppointmentLink: appointment.id,
             };
           }),
@@ -87,8 +87,12 @@ const YourAppointments = () => {
       title: "",
       dataIndex: "prescribeButton",
       key: "prescribeButton",
-      render: (patientId) => (
-        <Link to={`/doctor/prescribe/${patientId}`}>Prescribe medicine</Link>
+      render: (appointment) => (
+        <Link
+          to={`/doctor/prescribe/${appointment.patient.id}/${appointment.id}`}
+        >
+          Prescribe medicine
+        </Link>
       ),
     },
     {

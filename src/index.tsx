@@ -14,11 +14,15 @@ import Login from "./pages/auth/staff/login";
 import AppContextProvider from "./context/AppContextProvider";
 import ReceptionHome from "./pages/reception/home";
 import DoctorAppointments from "./pages/doctor";
+import Prescribe from "./pages/doctor/prescribe";
 
 // axios config
 axios.defaults.baseURL = Config.API_BASE_URL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+  "token"
+)}`;
 
 const router = createBrowserRouter([
   {
@@ -48,6 +52,10 @@ const router = createBrowserRouter([
   {
     path: "/auth/staff/login",
     element: <Login />,
+  },
+  {
+    path: "/doctor/prescribe/:patientId/:appointmentId",
+    element: <Prescribe />,
   },
 ]);
 
