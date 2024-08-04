@@ -25,7 +25,7 @@ const Prescribe = () => {
     }
   }, [authenticatingUser, navigate, role]);
 
-  if (authenticatingUser) return <AuthLoader />;
+  if (authenticatingUser || role !== "Doctor") return <AuthLoader />;
 
   return (
     <AppLayout navItems={navLinks}>

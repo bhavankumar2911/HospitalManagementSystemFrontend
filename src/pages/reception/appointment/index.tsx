@@ -25,7 +25,7 @@ const Appointment = () => {
     }
   }, [authenticatingUser, navigate, role]);
 
-  if (authenticatingUser) return <AuthLoader />;
+  if (authenticatingUser || role !== "Receptionist") return <AuthLoader />;
 
   return (
     <AppLayout navItems={navLinks}>

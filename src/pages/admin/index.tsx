@@ -17,7 +17,7 @@ const Admin: React.FC = () => {
     }
   }, [authenticatingUser, navigate, role]);
 
-  if (authenticatingUser) return <AuthLoader />;
+  if (authenticatingUser || role !== "Admin") return <AuthLoader />;
 
   return (
     <AppLayout navItems={navLinks}>
