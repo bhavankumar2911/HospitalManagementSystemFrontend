@@ -55,7 +55,9 @@ const UpcomingAppointments = () => {
           ...appointments.map((appointment: any) => {
             return {
               id: appointment.id,
-              fixedDateTime: dayjs(appointment.fixedDateTime).toString(),
+              fixedDateTime: new Date(
+                appointment.fixedDateTime
+              ).toLocaleString(),
               doctor: `${appointment.doctor.staff.firstname} ${appointment.doctor.staff.lastname}`,
               patient: `${appointment.patient.firstname} ${appointment.patient.lastname}`,
             };

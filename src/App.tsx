@@ -1,87 +1,75 @@
 import React, { useEffect } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import axios from "axios";
+import AppLayout from "./components/app/AppLayout";
+import { Link } from "react-router-dom";
 
 function App() {
+  const navLinks = [
+    { key: "patient", label: <Link to="/patient">Patient</Link> },
+    { key: "login", label: <Link to="/auth/staff/login">Staff Login</Link> },
+  ];
+
   useEffect(() => {
     // (async () => {
-    //   // Function to generate a dummy patient entry with real data
-    //   const generatePatientEntry = (index: number) => {
-    //     const genders = [0, 1]; // 0: female, 1: male
-    //     const names = [
-    //       { firstname: "John", lastname: "Doe" },
-    //       { firstname: "Jane", lastname: "Smith" },
-    //       { firstname: "Emily", lastname: "Johnson" },
-    //       { firstname: "Michael", lastname: "Brown" },
-    //       { firstname: "Linda", lastname: "Williams" },
-    //       { firstname: "James", lastname: "Miller" },
-    //       { firstname: "Olivia", lastname: "Davis" },
-    //       { firstname: "Daniel", lastname: "Garcia" },
-    //       { firstname: "Sophia", lastname: "Martinez" },
-    //       { firstname: "Liam", lastname: "Hernandez" },
-    //     ];
-    //     const preConditions = [
-    //       "Diabetes",
-    //       "Hypertension",
-    //       "Asthma",
-    //       "Chronic Obstructive Pulmonary Disease (COPD)",
-    //       "Heart Disease",
-    //       "Arthritis",
-    //       "Kidney Disease",
-    //       "Epilepsy",
-    //       "Migraines",
-    //       "Thyroid Disorder",
-    //     ];
-    //     const allergies = [
-    //       "Peanuts",
-    //       "Shellfish",
-    //       "Milk",
-    //       "Eggs",
-    //       "Soy",
-    //       "Wheat",
-    //       "Tree Nuts",
-    //       "Dust Mites",
-    //       "Pollen",
-    //       "Penicillin",
-    //     ];
-    //     // Ensure the blood type index is within the range 0-7
-    //     const blood = index % 8;
-    //     const name = names[index % names.length];
-    //     const preCondition = preConditions[index % preConditions.length];
-    //     const allergy = allergies[index % allergies.length];
+    //   // Define the type for medicine data
+    //   interface Medicine {
+    //     name: string;
+    //     quantityInMG: number;
+    //     price: string;
+    //     units: number;
+    //   }
+    //   // Base URL for the API
+    //   const baseURL: string = "http://yourapiurl.com"; // Replace with your actual API base URL
+    //   // List of real medicine names
+    //   const medicineNames: string[] = [
+    //     "Paracetamol",
+    //     "Ibuprofen",
+    //     "Aspirin",
+    //     "Amoxicillin",
+    //     "Cetirizine",
+    //     "Metformin",
+    //     "Lisinopril",
+    //     "Omeprazole",
+    //     "Simvastatin",
+    //     "Losartan",
+    //   ];
+    //   // Function to generate dummy medicine data
+    //   const generateDummyMedicine = (index: number): Medicine => {
+    //     const name: string = medicineNames[index % medicineNames.length]; // Cycle through the medicine names
     //     return {
-    //       gender: genders[index % genders.length], // Randomly select gender
-    //       blood: blood, // Use index for blood type
-    //       firstname: name.firstname,
-    //       lastname: name.lastname,
-    //       email: `patient${index + 1}@example.com`,
-    //       phone: `+1-555-010${index + 1}`, // Phone number with country code
-    //       address: `1234 Health Ave, City ${index + 1}, Country`,
-    //       dateOfBirth: new Date().toISOString(),
-    //       medicalHistory: {
-    //         preConditions: preCondition,
-    //         allergies: allergy,
-    //       },
+    //       name: name,
+    //       quantityInMG: Math.floor(Math.random() * 1000) + 1, // Random quantity between 1 and 1000 mg
+    //       price: (Math.random() * 100).toFixed(2), // Random price between 0 and 100
+    //       units: Math.floor(Math.random() * 100) + 1, // Random units between 1 and 100
     //     };
     //   };
-    //   // Save 10 dummy patient entries
-    //   const savePatients = async () => {
+    //   // Function to send a POST request
+    //   const sendMedicineData = async (
+    //     medicineData: Medicine
+    //   ): Promise<void> => {
     //     try {
-    //       for (let i = 0; i < 10; i++) {
-    //         const patientEntry = generatePatientEntry(i);
-    //         const response = await axios.post("/patient", patientEntry);
-    //         console.log(`Patient ${i + 1} saved successfully:`, response.data);
-    //       }
+    //       const response = await axios.post(`/medicine`, medicineData);
+    //       console.log("Medicine entry created:", response.data);
     //     } catch (error) {
-    //       console.error("Error saving patients:", error);
+    //       console.error(
+    //         "Error creating medicine entry:",
+    //         (error as Error).message
+    //       );
     //     }
     //   };
-    //   // Call the function to save patients
-    //   savePatients();
+    //   // Loop to create and send 10 dummy medicine entries
+    //   for (let i = 0; i < 10; i++) {
+    //     const dummyMedicine: Medicine = generateDummyMedicine(i);
+    //     sendMedicineData(dummyMedicine);
+    //   }
     // })();
   });
-  return <div></div>;
+
+  return (
+    <AppLayout navItems={navLinks}>
+      <h1>hos</h1>
+    </AppLayout>
+  );
 }
 
 export default App;

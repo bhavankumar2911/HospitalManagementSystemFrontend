@@ -42,8 +42,6 @@ const AddPatient = () => {
     delete data.preConditions;
     delete data.allergies;
 
-    console.log(data);
-
     try {
       setSavingPatient(true);
       const response = await axios.post("/patient", data);

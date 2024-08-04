@@ -9,12 +9,19 @@ import axios from "axios";
 import Config from "./config";
 import Appointment from "./pages/reception/appointment";
 import Patient from "./pages/reception/patient";
+import PatientLogin from "./pages/patient";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Login from "./pages/auth/staff/login";
 import AppContextProvider from "./context/AppContextProvider";
 import ReceptionHome from "./pages/reception/home";
 import DoctorAppointments from "./pages/doctor";
 import Prescribe from "./pages/doctor/prescribe";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import dayjs from "dayjs";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // axios config
 axios.defaults.baseURL = Config.API_BASE_URL;
@@ -40,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/doctor",
     element: <DoctorAppointments />,
+  },
+  {
+    path: "/patient",
+    element: <PatientLogin />,
   },
   {
     path: "/reception/patient",

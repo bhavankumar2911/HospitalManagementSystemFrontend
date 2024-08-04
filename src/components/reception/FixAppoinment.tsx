@@ -9,29 +9,28 @@ import {
   Select,
   Skeleton,
   Space,
+  Spin,
   Typography,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { DefaultOptionType } from "antd/es/select";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import SubmitButton from "../app/SubmitButton";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
 const FixAppoinment = () => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  // const [selectedDoctor, setSelectedDoctor] = useState(-1);
   const [doctorOptions, setDoctorOptions] = useState<DefaultOptionType[]>([]);
   const [patientOptions, setPatientOptions] = useState<DefaultOptionType[]>([]);
+  const [slotOptions, setSlotOptions] = useState<DefaultOptionType[]>([]);
 
   const fetchDoctorsWithLeastAppointments = async () => {
-    const response = await axios.get("/doctors/least-appointments");
+    const response = await axios.get("/doctor");
     return response.data;
   };
 
@@ -72,8 +71,6 @@ const FixAppoinment = () => {
     error: patientQueryError,
   } = useQuery("patientQuery", fetchPatients, {
     onSuccess: (data) => {
-      console.log(data);
-
       setPatientOptions([
         ...data.data.map((patient: any) => {
           return {
@@ -96,6 +93,56 @@ const FixAppoinment = () => {
       form.resetFields();
     },
   });
+
+  const getDoctorSlots = async (doctorId: number) => {
+    const response = await axios.get(`/doctor/appointment-slots/${doctorId}`);
+    console.log([
+      ...response.data.data.appointmentSlots.map((slot: any) => {
+        return {
+          label: `${dayjs(slot.from).get("hour")}:${
+            dayjs(slot.from).get("minutes") || "00"
+          } - ${dayjs(slot.to).get("hour")}:${
+            dayjs(slot.to).get("minutes") || "00"
+          }`,
+          value: slot.from,
+        };
+      }),
+    ]);
+
+    setSlotOptions([
+      ...response.data.data.appointmentSlots.map((slot: any) => {
+        return {
+          label: `${dayjs(slot.from).get("hour")}:${
+            dayjs(slot.from).get("minutes") || "00"
+          } - ${dayjs(slot.to).get("hour")}:${
+            dayjs(slot.to).get("minutes") || "00"
+          }`,
+          value: slot.from,
+        };
+      }),
+    ]);
+  };
+
+  // const { isLoading: gettingSlots, refetch } = useQuery({
+  //   queryKey: ["slotsQuery"],
+  //   queryFn: getDoctorSlots,
+  //   // enabled: false,
+  //   onSuccess: (slots) => {
+  //     console.log(slots.appointmentSlots);
+  //     setSlotOptions([
+  //       ...slots.appointmentSlots.map((slot: any) => {
+  //         return {
+  //           label: `${dayjs(slot.from).get("hour")}:${
+  //             dayjs(slot.from).get("minutes") || "00"
+  //           } - ${dayjs(slot.to).get("hour")}:${
+  //             dayjs(slot.to).get("minutes") || "00"
+  //           }`,
+  //           value: slot.from,
+  //         };
+  //       }),
+  //     ]);
+  //   },
+  // });
 
   if (isDoctorsQueryError)
     return (
@@ -180,9 +227,6 @@ const FixAppoinment = () => {
                   </Space>
                 )}
               />
-              {/* <Typography.Link>
-                <Link to="/reception/patient">Patient not found? Add new</Link>
-              </Typography.Link> */}
             </Form.Item>
           </Col>
 
@@ -210,9 +254,29 @@ const FixAppoinment = () => {
                     </Typography.Text>
                   </Space>
                 )}
+                onChange={(value) => getDoctorSlots(value)}
               />
             </Form.Item>
           </Col>
+
+          {slotOptions.length > 0 && (
+            <Col span={24}>
+              <Form.Item
+                hasFeedback
+                label="Select slot"
+                name="fixedDateTime"
+                validateDebounce={1000}
+                rules={[
+                  {
+                    required: true,
+                    message: "Slot is required.",
+                  },
+                ]}
+              >
+                <Select options={slotOptions} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+          )}
 
           <Col span={24}>
             <Form.Item

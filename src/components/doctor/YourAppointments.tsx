@@ -29,7 +29,9 @@ const YourAppointments = () => {
         setTableData([
           ...appointments.map((appointment: any) => {
             return {
-              appointmentTiming: dayjs(appointment.fixedDateTime).toString(),
+              appointmentTiming: new Date(
+                appointment.fixedDateTime
+              ).toLocaleString(),
               patientName: `${appointment.patient.firstname} ${appointment.patient.lastname}`,
               concern: appointment.concern,
               prescribeButton: appointment,
