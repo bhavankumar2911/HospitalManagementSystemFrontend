@@ -2,10 +2,14 @@ import React, { useEffect } from "react";
 import "./App.css";
 import AppLayout from "./components/app/AppLayout";
 import { Link } from "react-router-dom";
+import { Col, Row, Typography } from "antd";
+import heroImage from "./images/hero.jpg";
 
 function App() {
   const navLinks = [
     { key: "patient", label: <Link to="/patient">Patient</Link> },
+    { key: "reception", label: <Link to="/reception/patient">Reception</Link> },
+    { key: "doctor", label: <Link to="/doctor">Doctor</Link> },
     { key: "login", label: <Link to="/auth/staff/login">Staff Login</Link> },
   ];
 
@@ -67,7 +71,29 @@ function App() {
 
   return (
     <AppLayout navItems={navLinks}>
-      <h1>hos</h1>
+      <Row align="middle" justify="center">
+        <Col span={24} md={12}>
+          <Typography.Title>HealthEase</Typography.Title>
+          <Typography.Paragraph>
+            At HealthEase, we believe that managing healthcare should be as
+            smooth and efficient as possible. Our state-of-the-art hospital
+            management system is designed to simplify and streamline every
+            aspect of healthcare administration, ensuring that your hospital
+            operates at its best.
+          </Typography.Paragraph>
+        </Col>
+        <Col span={24} md={12}>
+          <img
+            style={{
+              width: "70%",
+              margin: "0 auto",
+              display: "block",
+            }}
+            src={heroImage}
+            alt="hospital image"
+          />
+        </Col>
+      </Row>
     </AppLayout>
   );
 }

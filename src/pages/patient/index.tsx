@@ -4,17 +4,13 @@ import PatientLogin from "../../components/patient/PatientLogin";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { Form, message } from "antd";
-import dayjs from "dayjs";
+import PatientPrescriptions from "../../components/patient/PatientPrescriptions";
 
 const Patient = () => {
   const [form] = Form.useForm();
 
   const getPatientPrescriptions = async () => {
     const data = form.getFieldsValue();
-    console.log(
-      form.getFieldValue("dateOfBirth").tz("Asia/Kolkata", true).toISOString()
-    );
-
     const response = await axios.post("/patient/prescription", {
       ...data,
       dateOfBirth: form.getFieldValue("dateOfBirth").toISOString(),
@@ -31,6 +27,9 @@ const Patient = () => {
           message.error(err.response.data.message);
         else message.error("Something went wrong.");
       },
+      onSuccess: (presriptions) => {
+        console.log(presriptions);
+      },
     }
   );
 
@@ -38,7 +37,10 @@ const Patient = () => {
 
   return (
     <AppLayout navItems={navLinks}>
-      <PatientLogin mutate={mutate} isLoading={isLoading} form={form} />
+      {!!!data && (
+        <PatientLogin mutate={mutate} isLoading={isLoading} form={form} />
+      )}
+      {!!data && <PatientPrescriptions prescriptions={data} />}
     </AppLayout>
   );
 };

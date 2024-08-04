@@ -13,7 +13,6 @@ import PatientLogin from "./pages/patient";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Login from "./pages/auth/staff/login";
 import AppContextProvider from "./context/AppContextProvider";
-import ReceptionHome from "./pages/reception/home";
 import DoctorAppointments from "./pages/doctor";
 import Prescribe from "./pages/doctor/prescribe";
 import utc from "dayjs/plugin/utc";
@@ -39,10 +38,6 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <Admin />,
-  },
-  {
-    path: "/reception",
-    element: <ReceptionHome />,
   },
   {
     path: "/doctor",

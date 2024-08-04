@@ -3,6 +3,7 @@ import { useAppContext } from "../../../context/AppContextProvider";
 import AuthLoader from "../../../components/auth/AuthLoader";
 import AppLayout from "../../../components/app/AppLayout";
 import PrescribeMedicine from "../../../components/doctor/PrescribeMedicine";
+import { useEffect } from "react";
 
 const navLinks = [
   { key: "home", label: <Link to="/">Home</Link> },
@@ -18,12 +19,13 @@ const Prescribe = () => {
 
   const navigate = useNavigate();
 
-  if (authenticatingUser) return <AuthLoader />;
+  useEffect(() => {
+    if (!authenticatingUser && role != "Doctor") {
+      navigate("/auth/staff/login");
+    }
+  }, [authenticatingUser]);
 
-  if (role != "Doctor") {
-    navigate("/auth/staff/login");
-    return null;
-  }
+  if (authenticatingUser) return <AuthLoader />;
 
   return (
     <AppLayout navItems={navLinks}>

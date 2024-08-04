@@ -28,6 +28,7 @@ const StaffLogin = () => {
       console.log(data);
       const staff = data.data;
       localStorage.setItem("token", staff.token);
+      console.log(staff.role);
 
       switch (staff.role) {
         // doctor
@@ -36,7 +37,7 @@ const StaffLogin = () => {
           break;
         // receptionist
         case 2:
-          navigate("/reception");
+          navigate("/reception/patient");
           break;
         // admin
         case 4:

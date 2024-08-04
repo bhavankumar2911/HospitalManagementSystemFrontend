@@ -1,16 +1,13 @@
 import { MenuItemType } from "antd/es/menu/interface";
 import AppLayout from "../../../components/app/AppLayout";
 import AddPatient from "../../../components/reception/AddPatient";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../context/AppContextProvider";
 import AuthLoader from "../../../components/auth/AuthLoader";
+import { useEffect } from "react";
 
 const navLinks: MenuItemType[] = [
   { key: "home", label: <Link to="/">Home</Link> },
-  {
-    key: "reception",
-    label: <Link to="/reception">Reception</Link>,
-  },
   {
     key: "appointment",
     label: <Link to="/reception/appointment">Appointments</Link>,
@@ -21,12 +18,13 @@ const Patient = () => {
   const { authenticatingUser, role } = useAppContext();
   const navigate = useNavigate();
 
-  if (authenticatingUser) return <AuthLoader />;
+  useEffect(() => {
+    if (!authenticatingUser && role != "Receptionist") {
+      navigate("/auth/staff/login");
+    }
+  }, [authenticatingUser]);
 
-  if (role != "Receptionist") {
-    navigate("/auth/staff/login");
-    return null;
-  }
+  if (authenticatingUser) return <AuthLoader />;
 
   return (
     <AppLayout navItems={navLinks}>

@@ -5,13 +5,10 @@ import FixAppoinment from "../../../components/reception/FixAppoinment";
 import UpcomingAppointments from "../../../components/reception/UpcomingAppointments";
 import { useAppContext } from "../../../context/AppContextProvider";
 import AuthLoader from "../../../components/auth/AuthLoader";
+import { useEffect } from "react";
 
 const navLinks: MenuItemType[] = [
   { key: "home", label: <Link to="/">Home</Link> },
-  {
-    key: "reception",
-    label: <Link to="/reception">Reception</Link>,
-  },
   {
     key: "patient",
     label: <Link to="/reception/patient">Patients</Link>,
@@ -22,12 +19,14 @@ const Appointment = () => {
   const { authenticatingUser, role } = useAppContext();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!authenticatingUser && role != "Receptionist") {
+      navigate("/auth/staff/login");
+    }
+  }, [authenticatingUser]);
+
   if (authenticatingUser) return <AuthLoader />;
 
-  if (role != "Receptionist") {
-    navigate("/auth/staff/login");
-    return null;
-  }
   return (
     <AppLayout navItems={navLinks}>
       <FixAppoinment />
