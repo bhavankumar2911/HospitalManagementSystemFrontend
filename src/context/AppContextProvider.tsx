@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { useQuery } from "react-query";
 
 const AppContext = createContext<{
