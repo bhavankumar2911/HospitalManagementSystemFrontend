@@ -91,7 +91,7 @@ const StaffLogin = () => {
         <Space>
           <Form.Item>
             <SubmitButton loading={isLoading} form={form}>
-              Add Staff
+              Login
             </SubmitButton>
           </Form.Item>
 
