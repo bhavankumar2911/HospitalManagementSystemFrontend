@@ -20,7 +20,7 @@ const Prescribe = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authenticatingUser && role != "Doctor") {
+    if (!authenticatingUser && role !== "Doctor") {
       navigate("/auth/staff/login");
     }
   }, [authenticatingUser, navigate, role]);

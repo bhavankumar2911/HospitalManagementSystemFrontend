@@ -12,7 +12,7 @@ const Admin: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authenticatingUser && role != "Admin") {
+    if (!authenticatingUser && role !== "Admin") {
       navigate("/auth/staff/login");
     }
   }, [authenticatingUser, navigate, role]);
