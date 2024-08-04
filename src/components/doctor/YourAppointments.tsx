@@ -1,7 +1,6 @@
 import { Alert, Button, message, Skeleton, Table, Typography } from "antd";
 import { ColumnType } from "antd/es/table";
 import axios, { AxiosError } from "axios";
-import dayjs from "dayjs";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
@@ -116,7 +115,7 @@ const YourAppointments = () => {
       if ([403, 401].includes(error.response.status))
         navigate("/auth/staff/login");
 
-      if (error.response.status == 404)
+      if (error.response.status === 404)
         return (
           <Alert type="warning" message={error.response.data.message} banner />
         );

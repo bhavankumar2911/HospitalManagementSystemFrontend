@@ -8,11 +8,10 @@ import {
   message,
   Row,
   Select,
-  Skeleton,
   Space,
   Typography,
 } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SubmitButton from "../app/SubmitButton";
 import dayjs from "dayjs";
 import axios, { AxiosError } from "axios";
@@ -197,7 +196,7 @@ const AddStaff = () => {
             >
               <Select
                 onChange={(value) => {
-                  if (value == 0) {
+                  if (value === 0) {
                     setStaffRole(value);
                     setApiURL("/doctor");
                   } else {
@@ -212,7 +211,7 @@ const AddStaff = () => {
           </Col>
 
           {/* only for doctor */}
-          {staffRole == 0 ? (
+          {staffRole === 0 ? (
             <>
               <Col span={24} md={12}>
                 <Form.Item

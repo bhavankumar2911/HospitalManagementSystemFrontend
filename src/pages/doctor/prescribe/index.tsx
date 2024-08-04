@@ -23,7 +23,7 @@ const Prescribe = () => {
     if (!authenticatingUser && role != "Doctor") {
       navigate("/auth/staff/login");
     }
-  }, [authenticatingUser]);
+  }, [authenticatingUser, navigate, role]);
 
   if (authenticatingUser) return <AuthLoader />;
 

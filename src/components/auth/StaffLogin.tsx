@@ -1,17 +1,8 @@
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  message,
-  Row,
-  Space,
-  Typography,
-} from "antd";
+import { Button, Form, Input, message, Space, Typography } from "antd";
 import SubmitButton from "../app/SubmitButton";
 import { useMutation } from "react-query";
 import axios from "axios";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const StaffLogin = () => {
   const [form] = Form.useForm();

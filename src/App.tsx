@@ -90,7 +90,7 @@ function App() {
               display: "block",
             }}
             src={heroImage}
-            alt="hospital image"
+            alt="hospital"
           />
         </Col>
       </Row>

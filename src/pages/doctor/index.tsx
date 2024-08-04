@@ -12,10 +12,10 @@ const DoctorAppointments = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authenticatingUser && role != "Doctor") {
+    if (!authenticatingUser && role !== "Doctor") {
       navigate("/auth/staff/login");
     }
-  }, [authenticatingUser]);
+  }, [authenticatingUser, navigate, role]);
 
   if (authenticatingUser) return <AuthLoader />;
 

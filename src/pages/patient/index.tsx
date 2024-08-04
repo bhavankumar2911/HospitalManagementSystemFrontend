@@ -19,19 +19,16 @@ const Patient = () => {
     return response.data.data;
   };
 
-  const { isLoading, isError, mutate, error, data } = useMutation(
-    getPatientPrescriptions,
-    {
-      onError: (err) => {
-        if (err instanceof AxiosError && err.response)
-          message.error(err.response.data.message);
-        else message.error("Something went wrong.");
-      },
-      onSuccess: (presriptions) => {
-        console.log(presriptions);
-      },
-    }
-  );
+  const { isLoading, mutate, data } = useMutation(getPatientPrescriptions, {
+    onError: (err) => {
+      if (err instanceof AxiosError && err.response)
+        message.error(err.response.data.message);
+      else message.error("Something went wrong.");
+    },
+    onSuccess: (presriptions) => {
+      console.log(presriptions);
+    },
+  });
 
   const navLinks = [{ key: "home", label: <Link to="/">Home</Link> }];
 

@@ -19,10 +19,10 @@ const Patient = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authenticatingUser && role != "Receptionist") {
+    if (!authenticatingUser && role !== "Receptionist") {
       navigate("/auth/staff/login");
     }
-  }, [authenticatingUser]);
+  }, [authenticatingUser, navigate, role]);
 
   if (authenticatingUser) return <AuthLoader />;
 

@@ -55,7 +55,7 @@ const PrescribeMedicine = ({ patientId }: { patientId: string }) => {
     const { prescriptionItems } = form.getFieldsValue();
     const processedPrescriptionItems = [];
 
-    if (prescriptionItems == undefined || prescriptionItems.length == 0)
+    if (prescriptionItems === undefined || prescriptionItems.length === 0)
       throw new Error("Add atleast one prescription item.");
 
     for (let i = 0; i < prescriptionItems.length; i++) {

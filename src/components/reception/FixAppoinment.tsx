@@ -3,18 +3,16 @@ import {
   Button,
   Col,
   Form,
-  Input,
   message,
   Row,
   Select,
   Skeleton,
   Space,
-  Spin,
   Typography,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { DefaultOptionType } from "antd/es/select";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import SubmitButton from "../app/SubmitButton";
@@ -154,7 +152,7 @@ const FixAppoinment = () => {
     );
 
   if (ispatientQueryError) {
-    if ((patientQueryError as any).response.status == 404)
+    if ((patientQueryError as any).response.status === 404)
       return (
         <Alert
           type="warning"

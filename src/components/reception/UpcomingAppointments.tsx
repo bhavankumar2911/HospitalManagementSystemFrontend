@@ -1,6 +1,5 @@
 import { Skeleton, Table, Typography } from "antd";
 import axios from "axios";
-import dayjs from "dayjs";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
@@ -46,7 +45,7 @@ const UpcomingAppointments = () => {
     return response.data.data;
   };
 
-  const { isLoading, isError } = useQuery(
+  const { isLoading } = useQuery(
     "appointmentsQuery",
     fetchUpcomingAppointments,
     {

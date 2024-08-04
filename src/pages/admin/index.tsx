@@ -15,7 +15,7 @@ const Admin: React.FC = () => {
     if (!authenticatingUser && role != "Admin") {
       navigate("/auth/staff/login");
     }
-  }, [authenticatingUser]);
+  }, [authenticatingUser, navigate, role]);
 
   if (authenticatingUser) return <AuthLoader />;
 
