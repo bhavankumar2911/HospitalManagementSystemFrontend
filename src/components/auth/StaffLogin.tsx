@@ -1,12 +1,13 @@
 import { Button, Form, Input, message, Space, Typography } from "antd";
 import SubmitButton from "../app/SubmitButton";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const StaffLogin = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const loginStaff = async () => {
     const response = await axios.post("/login", form.getFieldsValue());
@@ -16,11 +17,10 @@ const StaffLogin = () => {
 
   const { mutate, isLoading } = useMutation(loginStaff, {
     onSuccess: (data) => {
-      console.log(data);
       const staff = data.data;
       localStorage.setItem("token", staff.token);
-      console.log(staff.role);
 
+      queryClient.invalidateQueries("authQuery");
       switch (staff.role) {
         // doctor
         case 0:
