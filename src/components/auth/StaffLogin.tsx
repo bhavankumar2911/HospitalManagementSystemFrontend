@@ -3,7 +3,6 @@ import SubmitButton from "../app/SubmitButton";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 const StaffLogin = () => {
   const [form] = Form.useForm();
@@ -16,11 +15,6 @@ const StaffLogin = () => {
 
     return response.data;
   };
-
-  useEffect(() => {
-    form.setFieldValue("email", "@healthease.com");
-    form.setFieldValue("plainTextPassword", "H1qazse4//");
-  }, []);
 
   const { mutate, isLoading } = useMutation(loginStaff, {
     onSuccess: async (data) => {
