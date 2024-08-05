@@ -15,13 +15,14 @@ import {
 import { DefaultOptionType } from "antd/es/cascader";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import createDropdownOptions from "../../lib/app/createDropdownOptions";
 import getConsumingIntervalOptions from "../../lib/app/getConsumingIntervalOptions";
 import SubmitButton from "../app/SubmitButton";
 
 const PrescribeMedicine = ({ patientId }: { patientId: string }) => {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
 
   const [medicineOptions, setMedicineOptions] = useState<DefaultOptionType[]>(
     []
@@ -98,6 +99,7 @@ const PrescribeMedicine = ({ patientId }: { patientId: string }) => {
         else if (err instanceof Error) message.error(err.message);
       },
       onSuccess: (data) => {
+        queryClient.invalidateQueries("doctorPrescriptionsQuery");
         message.success(data.message);
         form.resetFields();
       },

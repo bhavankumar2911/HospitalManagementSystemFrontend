@@ -4,6 +4,7 @@ import AuthLoader from "../../../components/auth/AuthLoader";
 import AppLayout from "../../../components/app/AppLayout";
 import PrescribeMedicine from "../../../components/doctor/PrescribeMedicine";
 import { useEffect } from "react";
+import DoctorPrescriptions from "../../../components/doctor/DoctorPrescriptions";
 
 const navLinks = [
   { key: "home", label: <Link to="/">Home</Link> },
@@ -30,6 +31,7 @@ const Prescribe = () => {
   return (
     <AppLayout navItems={navLinks}>
       <PrescribeMedicine patientId={patientId as string} />
+      <DoctorPrescriptions patientId={patientId as string} />
     </AppLayout>
   );
 };
