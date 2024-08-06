@@ -27,9 +27,15 @@ dayjs.extend(timezone);
 axios.defaults.baseURL = Config.API_BASE_URL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem(
   "token"
 )}`;
+
+axios.interceptors.request.use(function (config) {
+  const token = localStorage.getItem("token");
+  config.headers.Authorization = token ? `Bearer ${token}` : "";
+  return config;
+});
 
 const router = createBrowserRouter([
   {

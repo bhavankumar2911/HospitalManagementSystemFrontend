@@ -29,7 +29,11 @@ const PrescribeMedicine = ({ patientId }: { patientId: string }) => {
   );
 
   const fetchAllMedicines = async () => {
-    const response = await axios.get("/medicine");
+    const response = await axios.get("/medicine", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
 
     return response.data.data;
   };

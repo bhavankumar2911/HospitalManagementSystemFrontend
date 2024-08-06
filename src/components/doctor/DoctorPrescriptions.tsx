@@ -32,7 +32,12 @@ const DoctorPrescriptions = ({ patientId }: { patientId: string }) => {
 
   const getPrescriptionHistory = async () => {
     const response = await axios.get(
-      `/doctor/patient/prescription/${patientId}`
+      `/doctor/patient/prescription/${patientId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
     );
 
     return response.data.data;
