@@ -18,6 +18,7 @@ import Prescribe from "./pages/doctor/prescribe";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
+import { ConfigProvider } from "antd";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -73,9 +74,19 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AppContextProvider>
-        <RouterProvider router={router} />
-      </AppContextProvider>
+      <ConfigProvider
+        theme={{
+          components: {
+            Menu: {
+              darkItemSelectedBg: "#001529",
+            },
+          },
+        }}
+      >
+        <AppContextProvider>
+          <RouterProvider router={router} />
+        </AppContextProvider>
+      </ConfigProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

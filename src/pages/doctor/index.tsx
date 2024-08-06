@@ -4,8 +4,15 @@ import AuthLoader from "../../components/auth/AuthLoader";
 import AppLayout from "../../components/app/AppLayout";
 import YourAppointments from "../../components/doctor/YourAppointments";
 import { useEffect } from "react";
+import LogoutButton from "../../components/auth/LogoutButton";
 
-const navLinks = [{ key: "home", label: <Link to="/">Home</Link> }];
+const navLinks = [
+  { key: "home", label: <Link to="/">Home</Link> },
+  {
+    key: "logout",
+    label: <LogoutButton />,
+  },
+];
 
 const DoctorAppointments = () => {
   const { authenticatingUser, role } = useAppContext();

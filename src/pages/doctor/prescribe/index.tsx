@@ -5,12 +5,17 @@ import AppLayout from "../../../components/app/AppLayout";
 import PrescribeMedicine from "../../../components/doctor/PrescribeMedicine";
 import { useEffect } from "react";
 import DoctorPrescriptions from "../../../components/doctor/DoctorPrescriptions";
+import LogoutButton from "../../../components/auth/LogoutButton";
 
 const navLinks = [
   { key: "home", label: <Link to="/">Home</Link> },
   {
     key: "doctor",
     label: <Link to="/doctor">Your appointments</Link>,
+  },
+  {
+    key: "logout",
+    label: <LogoutButton />,
   },
 ];
 

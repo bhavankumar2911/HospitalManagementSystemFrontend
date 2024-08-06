@@ -4,8 +4,15 @@ import AddStaff from "../../components/admin/AddStaff";
 import { useAppContext } from "../../context/AppContextProvider";
 import AuthLoader from "../../components/auth/AuthLoader";
 import { Link, useNavigate } from "react-router-dom";
+import LogoutButton from "../../components/auth/LogoutButton";
 
-const navLinks = [{ key: "home", label: <Link to="/">Home</Link> }];
+const navLinks = [
+  { key: "home", label: <Link to="/">Home</Link> },
+  {
+    key: "logout",
+    label: <LogoutButton />,
+  },
+];
 
 const Admin: React.FC = () => {
   const { authenticatingUser, role } = useAppContext();

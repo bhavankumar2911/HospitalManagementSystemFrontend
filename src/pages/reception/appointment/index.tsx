@@ -6,12 +6,17 @@ import UpcomingAppointments from "../../../components/reception/UpcomingAppointm
 import { useAppContext } from "../../../context/AppContextProvider";
 import AuthLoader from "../../../components/auth/AuthLoader";
 import { useEffect } from "react";
+import LogoutButton from "../../../components/auth/LogoutButton";
 
 const navLinks: MenuItemType[] = [
   { key: "home", label: <Link to="/">Home</Link> },
   {
     key: "patient",
     label: <Link to="/reception/patient">Patients</Link>,
+  },
+  {
+    key: "logout",
+    label: <LogoutButton />,
   },
 ];
 

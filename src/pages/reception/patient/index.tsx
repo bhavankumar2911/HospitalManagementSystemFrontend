@@ -5,12 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../context/AppContextProvider";
 import AuthLoader from "../../../components/auth/AuthLoader";
 import { useEffect } from "react";
+import LogoutButton from "../../../components/auth/LogoutButton";
 
 const navLinks: MenuItemType[] = [
   { key: "home", label: <Link to="/">Home</Link> },
   {
     key: "appointment",
     label: <Link to="/reception/appointment">Appointments</Link>,
+  },
+  {
+    key: "logout",
+    label: <LogoutButton />,
   },
 ];
 
