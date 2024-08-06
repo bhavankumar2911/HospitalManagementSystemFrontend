@@ -108,7 +108,7 @@ const YourAppointments = () => {
     },
   ];
 
-  if (isLoading || tableData.length == 0) return <Skeleton active />;
+  if (isLoading || tableData.length === 0) return <Skeleton active />;
 
   if (isError) {
     if (error instanceof AxiosError && error.response) {
